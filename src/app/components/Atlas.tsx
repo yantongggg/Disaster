@@ -116,8 +116,8 @@ export function Atlas() {
   };
 
   // Matrix Markers (10 ASEAN Countries)
-  // Positions are calculated based on SVG viewBox coordinate system (1600x1200)
-  // and converted to percentages for responsive scaling
+  // Positions calculated from SVG text/circle coordinates (viewBox="0 0 1600 1200")
+  // Formula: left% = (svgX / 1600) * 100, top% = (svgY / 1200) * 100
   const markers = [
     {
       id: "ph",
@@ -125,8 +125,8 @@ export function Atlas() {
       country: "Philippines",
       icon: Wind,
       color: "#4CC9F0",
-      top: "29.2%",  // 350/1200
-      left: "54.4%", // 870/1600
+      top: "28.3%",  // SVG text y="340" → 340/1200
+      left: "55.3%", // SVG text x="885" → 885/1600
       flag: "🇵🇭",
       profile: "Extremely high disaster risk. Located in the Pacific typhoon belt, volcanic arc, earthquake faults, and mountainous islands prone to landslides.",
       history: ["Super Typhoon Haiyan (2013): 6,300+ deaths, 4M displaced.", "Mount Pinatubo Eruption (1991): 800+ deaths."],
@@ -139,8 +139,8 @@ export function Atlas() {
       country: "Indonesia",
       icon: TriangleAlert,
       color: "#EF476F",
-      top: "77.5%",  // 930/1200 (Java area)
-      left: "43.8%", // 700/1600
+      top: "80.8%",  // SVG text y="970" → 970/1200
+      left: "45.6%", // SVG text x="730" → 730/1600
       flag: "🇮🇩",
       profile: "One of the most geologically active countries. Located along the Pacific Ring of Fire with 130+ active volcanoes.",
       history: ["2004 Indian Ocean Tsunami: 170,000+ deaths in Indonesia alone.", "Mount Merapi Eruption (2010): 350+ deaths.", "2025 Sumatra Flood: 1,000+ deaths."],
@@ -153,8 +153,8 @@ export function Atlas() {
       country: "Malaysia",
       icon: Droplets,
       color: "#4682B4",
-      top: "54.2%",  // 650/1200 (Peninsula + Borneo average)
-      left: "43.1%", // 690/1600
+      top: "57.5%",  // SVG text y="690" → 690/1200 (Peninsula)
+      left: "27.8%", // SVG text x="445" → 445/1600
       flag: "🇲🇾",
       profile: "Mainly faces hydrological disasters. High exposure to monsoon flooding, landslides, and coastal storms.",
       history: ["2021–2022 Floods: 54 deaths, massive damages in Selangor & KL.", "2025 Cyclonic Storm Senyar: Rare cyclone caused major flooding."],
@@ -167,8 +167,8 @@ export function Atlas() {
       country: "Thailand",
       icon: Waves,
       color: "#06D6A0",
-      top: "38.3%",  // 460/1200
-      left: "28.8%", // 460/1600
+      top: "39.2%",  // SVG text y="470" → 470/1200
+      left: "26.9%", // SVG text x="430" → 430/1600
       flag: "🇹🇭",
       profile: "Faces mainly monsoon floods, droughts, and tropical storms. Large rivers increase widespread flood risk.",
       history: ["2011 Mega Flood: 815 deaths, $46B damage. Bangkok almost completely flooded.", "2016–2017 Southern Floods: Affected 1.8M people."],
@@ -181,8 +181,8 @@ export function Atlas() {
       country: "Vietnam",
       icon: CloudRain,
       color: "#118AB2",
-      top: "35.8%",  // 430/1200
-      left: "44.4%", // 710/1600
+      top: "34.2%",  // SVG text y="410" → 410/1200
+      left: "41.3%", // SVG text x="660" → 660/1600
       flag: "🇻🇳",
       profile: "One of the highest typhoon exposure levels in Asia. High risk of coastal and river flooding.",
       history: ["1964 Central Vietnam Floods: 7,000 deaths.", "2025 Typhoon Season: Several storms caused severe flooding."],
@@ -195,8 +195,8 @@ export function Atlas() {
       country: "Myanmar",
       icon: Activity,
       color: "#FFD166",
-      top: "30.0%",  // 360/1200
-      left: "19.7%", // 315/1600
+      top: "28.3%",  // SVG text y="340" → 340/1200
+      left: "19.7%", // SVG text x="315" → 315/1600
       flag: "🇲🇲",
       profile: "Highly vulnerable to cyclones, earthquakes, landslides, and monsoon flooding.",
       history: ["Cyclone Nargis (2008): 138,000 deaths, millions displaced.", "2025 Earthquake: Magnitude 7.7 widespread damage.", "Cyclone Komen (2015): 1.7M displaced."],
@@ -209,8 +209,8 @@ export function Atlas() {
       country: "Singapore",
       icon: Sun,
       color: "#FF9F1C",
-      top: "63.8%",  // 765/1200
-      left: "28.1%", // 450/1600
+      top: "66.3%",  // SVG circle cy="795" → 795/1200
+      left: "29.1%", // SVG circle cx="465" → 465/1600
       flag: "🇸🇬",
       profile: "Has fewer disasters but faces increasing urban climate risks like heat waves and flash floods.",
       history: ["2010 Orchard Road Flood: Urban drainage failure caused major city flooding."],
@@ -223,8 +223,8 @@ export function Atlas() {
       country: "Cambodia",
       icon: Droplets,
       color: "#073B4C",
-      top: "45.0%",  // 540/1200
-      left: "37.5%", // 600/1600
+      top: "43.3%",  // SVG text y="520" → 520/1200
+      left: "36.6%", // SVG text x="585" → 585/1600
       flag: "🇰🇭",
       profile: "Disasters are heavily linked to the Mekong River system, leading to alternating flood and drought cycles.",
       history: ["Mekong Floods (2000): 347 deaths, huge agricultural losses."],
@@ -237,8 +237,8 @@ export function Atlas() {
       country: "Laos",
       icon: Mountain,
       color: "#8B5A2B",
-      top: "30.8%",  // 370/1200
-      left: "32.5%", // 520/1600
+      top: "27.5%",  // SVG text y="330" → 330/1200
+      left: "31.6%", // SVG text x="505" → 505/1600
       flag: "🇱🇦",
       profile: "A mountainous country facing significant risks from river flooding, landslides, and dam failures.",
       history: ["2018 Xe-Pian Xe-Namnoy Dam Collapse: Hundreds dead, thousands displaced."],
@@ -251,8 +251,8 @@ export function Atlas() {
       country: "Brunei",
       icon: Shield,
       color: "#06D6A0",
-      top: "51.3%",  // 615/1200
-      left: "45.0%", // 720/1600
+      top: "52.9%",  // SVG circle cy="635" → 635/1200
+      left: "45.0%", // SVG circle cx="720" → 720/1600
       flag: "🇧🇳",
       profile: "Lowest disaster exposure in ASEAN, with minimal displacement numbers.",
       history: ["Generally stable with the lowest disaster displacement numbers in Southeast Asia."],
