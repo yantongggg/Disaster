@@ -75,30 +75,28 @@ Natural disasters claim thousands of lives across ASEAN annually. Many deaths ar
 
 ```mermaid
 flowchart LR
-    Start([Sign Up<br/>Create Profile]) --> Learn[Learn About<br/>Disasters<br/>(Atlas)]
-    Learn --> Practice[Practice<br/>via AR Training]
-    Practice --> Earn{Earn XP & Badges}
+    Start([Sign Up and Create Profile]) --> Learn[Learn About Disasters]
+    Learn --> Practice[Practice via AR Training]
+    Practice --> Earn{Earn XP and Badges}
     Earn --> LevelUp[Level Up]
     Earn --> Unlock[Unlock New Missions]
-    LevelUp --> Return(Return to Dashboard)
+    LevelUp --> Return[Return to Dashboard]
     Unlock --> Return
     Return --> Practice
 ```
 
 ```mermaid
 flowchart TD
-    subgraph Modules["Four Main Modules"]
-        Dashboard["🏠 Dashboard<br/>Home Base<br/>Progress & Missions"]
-        Atlas["🗺️ Atlas<br/>Map Explorer<br/>Disaster Data"]
-        AR["👁️ AR Training<br/>Simulation<br/>Practice Drills"]
-        Possum["🦝 Possum Protocol<br/>Emergency Tools<br/>Offline Survival]
-    end
+    Dashboard[Dashboard - Home Base]
+    Atlas[Atlas - Map Explorer]
+    AR[AR Training - Simulation]
+    Possum[Possum Protocol - Emergency Tools]
 
     Dashboard --> Atlas
     Dashboard --> AR
-    Atlas --> EarnXP["Earn XP"]
-    AR --> EarnXP
-    EarnXP --> Dashboard
+    Atlas --> XP[Earn XP]
+    AR --> XP
+    XP --> Dashboard
     Dashboard --> Possum
 ```
 
@@ -110,31 +108,29 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    subgraph Onboarding["User Onboarding Flow"]
-        Launch([First Launch]) --> Welcome[Welcome Screen<br/>Platform Introduction]
-        Welcome --> Profile[Create Profile<br/>Choose Avatar<br/>Enter Username<br/>Select Country/Region]
-        Profile --> Tutorial[Mascot Introduction<br/>Meet Gajah the Elephant<br/>Platform Tutorial]
-        Tutorial --> Dashboard[Enter Dashboard<br/>Level 1 Novice<br/>First Mission Ready<br/>Village Score Init]
-    end
+    Launch([First Launch]) --> Welcome[Welcome Screen]
+    Welcome --> Profile[Create Profile]
+    Profile --> Tutorial[Mascot Introduction]
+    Tutorial --> Dashboard[Enter Dashboard]
 ```
 
 ### Phase 2: Daily Usage Loop
 
 ```mermaid
 flowchart TD
-    Open([Open App<br/>Daily Streak ++]) --> Check[Check Dashboard<br/>Weather Alert<br/>Progress Bar]
-    Check --> Select[Select Mission<br/>From Daily List]
+    Open([Open App]) --> Check[Check Dashboard]
+    Check --> Select[Select Mission]
     Select --> Mission{Mission Type}
 
-    Mission --> Complete[Complete Mission<br/>Earn XP<br/>+50-100 XP]
-    Mission --> Learn[Learn Disaster<br/>History<br/>(Atlas)]
+    Mission --> Complete[Complete Mission]
+    Mission --> Learn[Learn Disaster History]
 
     Complete --> Progress[Progress Saved]
     Learn --> Progress
 
     Progress --> CheckReward{Reward Check}
-    CheckReward -->|Level Up| LevelUp[Level Up<br/>New Content Unlocked]
-    CheckReward -->|Badge Earned| Badge[Badge Unlocked<br/>Celebration]
+    CheckReward -->|Level Up| LevelUp[Level Up]
+    CheckReward -->|Badge Earned| Badge[Badge Unlocked]
     CheckReward -->|No Reward| Return([Return to Dashboard])
 
     LevelUp --> Return
@@ -154,7 +150,7 @@ flowchart TD
 ┌──────────────────────────────────────────────────────────────┐
 │  ┌────────┐  ┌──────────────────┐  ┌──────────────────┐     │
 │  │ Avatar │  │ Weather Alert    │  │ Progress: 80%    │     │
-│  │ Level 4│  │ ⚠️ Flood Warning │  │ 1,240 / 1,500 XP │     │
+│  │ Level 4│  │ Flood Warning    │  │ 1,240 / 1,500 XP │     │
 │  └────────┘  └──────────────────┘  └──────────────────┘     │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
@@ -168,11 +164,11 @@ flowchart TD
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
 │  │                    YOUR BADGES                          │ │
-│  │  🏆 Flood Explorer    🌪️ Storm Spotter   🔒 Safety Hero│ │
+│  │  Flood Explorer    Storm Spotter   Safety Hero         │ │
 │  └────────────────────────────────────────────────────────┘ │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │        ←─ SWIPE RIGHT FOR EMERGENCY TOOLS ─────────→    │ │
+│  │        SWIPE RIGHT FOR EMERGENCY TOOLS                 │ │
 │  └────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -192,47 +188,35 @@ flowchart TD
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                     🔍 Search countries...                  │
+│                     Search countries...                        │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
 │  │                                                        │ │
-│  │   🇵🇭                  🇻🇳                          │ │
-│  │ Philippines              Vietnam                       │ │
-│  │ Typhoon Risk              Typhoon Risk                  │ │
+│  │   Philippines              Vietnam                       │ │
+│  │   Typhoon Risk              Typhoon Risk                  │ │
 │  │                                                        │ │
-│  │        🇲🇲         🇹🇭     🇱🇦    🇰🇭              │ │
-│  │      Myanmar    Thailand  Laos  Cambodia              │ │
-│  │    Cyclone     Flood    Flood   Flood                 │ │
+│  │        Myanmar    Thailand  Laos  Cambodia              │ │
+│  │      Cyclone     Flood    Flood   Flood                 │ │
 │  │                                                        │ │
-│  │  🇮🇩                                    🇲🇾          │ │
-│  │ Indonesia                              Malaysia       │ │
-│  │ Volcano                                Flood           │ │
+│  │  Indonesia                              Malaysia       │ │
+│  │  Volcano                                Flood           │ │
 │  │                                                        │ │
-│  │                  🇸🇬                                 │ │
 │  │               Singapore                              │ │
 │  │               Heat Risk                               │ │
 │  └────────────────────────────────────────────────────────┘ │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │  🇵🇭 Philippines — Typhoon Risk                        │ │
+│  │  Philippines - Typhoon Risk                            │ │
 │  │                                                        │ │
-│  │  📍 RISK PROFILE                                       │ │
+│  │  RISK PROFILE                                          │ │
 │  │  Located in the Pacific typhoon belt with an average   │ │
-│  │  of 20 typhoons per year. High exposure to storm       │ │
-│  │  surges, flooding, and landslides.                     │ │
+│  │  of 20 typhoons per year.                              │ │
 │  │                                                        │ │
-│  │  🌀 COMMON PATTERNS                                    │ │
-│  │  • Super typhoons  • Storm surges  • Flooding          │ │
+│  │  MAJOR HISTORICAL DISASTERS                           │ │
+│  │  Super Typhoon Haiyan 2013: 6300+ deaths               │ │
+│  │  Mount Pinatubo Eruption 1991: 800+ deaths             │ │
 │  │                                                        │ │
-│  │  📜 MAJOR HISTORICAL DISASTERS                         │ │
-│  │  • Super Typhoon Haiyan (2013): 6,300+ deaths          │ │
-│  │  • Mount Pinatubo Eruption (1991): 800+ deaths         │ │
-│  │                                                        │ │
-│  │  🔮 FUTURE FORECAST                                    │ │
-│  │  Climate models predict stronger typhoons and heavier  │ │
-│  │  rainfall in coming decades.                           │ │
-│  │                                                        │ │
-│  │           [✓ MARK AS LEARNED]                           │ │
+│  │  MARK AS LEARNED                                        │ │
 │  └────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -280,8 +264,6 @@ flowchart TD
                         │ STATE 3     │
                         │ Scan Your   │
                         │ Environment │
-                        │ [Reticle    │
-                        │  Animation] │
                         └──────┬──────┘
                                │
                                ▼
@@ -289,31 +271,20 @@ flowchart TD
                         │ STATE 4     │
                         │ History     │
                         │ Discovered! │
-                        │             │
-                        │ 1999 ───────│ 1.2m
-                        │ 2007 ───────│ 1.5m
-                        │ 2014 ───────│ 1.8m ⚠️
                         └──────┬──────┘
                                │
                                ▼
                         ┌─────────────┐
                         │ STATE 5     │
                         │ SIMULATION  │
-                        │             │
-                        │   _~_~_     │
-                        │  _(Water)   │ ← Rising!
-                        │             │
-                        │ 🏃 Find     │
-                        │    High     │
-                        │    Ground!  │
+                        │ Water Rising │
                         └──────┬──────┘
                                │
                                ▼
                         ┌─────────────┐
                         │ STATE 6     │
                         │ SUCCESS!    │
-                        │ 🎉 +50 XP   │
-                        │ 🏅 Badge... │
+                        │ +50 XP      │
                         └─────────────┘
 ```
 
@@ -322,16 +293,16 @@ flowchart TD
 ```mermaid
 stateDiagram-v2
     [*] --> Start: Select AR Mission
-    Start --> Tutorial: Watch 60s Video
+    Start --> Tutorial: Watch Video
     Tutorial --> Scan: Point Camera
     Scan --> History: Scan Environment
     History --> Timeline: Flood Levels Found
-    Timeline --> Simulation: 1999, 2007, 2014
+    Timeline --> Simulation: Show Historical Data
     Simulation --> Rising: Water Rising
-    Rising --> Action: Find High Ground!
+    Rising --> Action: Find High Ground
     Action --> Success: Tap in Time
     Action --> Fail: Too Slow
-    Success --> [*]: +50 XP, Celebration
+    Success --> [*]: XP and Celebration
     Fail --> Simulation: Try Again
 ```
 
@@ -349,40 +320,29 @@ stateDiagram-v2
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                  🦝 POSSUM PROTOCOL                          │
+│                  POSSUM PROTOCOL                             │
 │                  SURVIVAL MODE ACTIVE                        │
 ├──────────────────────────────────────────────────────────────┤
-│  🔋 MESH    ⚡ Ultra Power Saving     Battery: 67%           │
+│  MESH NETWORK    Ultra Power Saving     Battery: 67%        │
 └──────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────┐
 │                                                              │
 │  ┌──────────────┐  ┌──────────────┐                         │
-│  │   🔦         │  │   📡 SOS     │                         │
-│  │ FLASHLIGHT   │  │  BROADCAST   │                         │
+│  │ FLASHLIGHT   │  │  SOS BROADCAST│                         │
 │  │              │  │              │                         │
-│  │   [TOGGLE]   │  │   [ACTIVATE] │                         │
+│  │   TOGGLE     │  │   ACTIVATE    │                         │
 │  └──────────────┘  └──────────────┘                         │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │  🎤 SOUND RESCUE SIGNAL                                │ │
+│  │  SOUND RESCUE SIGNAL                                 │ │
 │  │  Listening for distress whistles...                    │ │
-│  │  ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐              │ │
-│  │  │ ║ │ ║ │ │ │ ║ │ ║ │ │ │ ║ │ │ │ ║ │ │              │ │
-│  │  └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘              │ │
-│  │  [Start Listening]                                     │ │
 │  └────────────────────────────────────────────────────────┘ │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │  🌐 OFFLINE MESH NETWORK                                │ │
-│  │                                                         │ │
-│  │     ◉───◉───◉                                          │ │
-│  │    /      \     \                                       │ │
-│  │   ◉       ◉     ◉                                      │ │
-│  │                                                         │ │
+│  │  OFFLINE MESH NETWORK                                 │ │
 │  │  4 nearby nodes found                                   │ │
-│  │                                                         │ │
-│  │  [📍 Share GPS]  [💬 Send Message]                      │ │
+│  │  [Share GPS]  [Send Message]                            │ │
 │  └────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -391,26 +351,26 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Dashboard[From Dashboard<br/>Swipe Right] --> Activate[Activate<br/>Possum Protocol]
+    Dashboard[From Dashboard Swipe Right] --> Activate[Activate Possum Protocol]
     Activate --> Assess{Assess Situation}
-    Assess --> Battery[Check Battery: 67%]
-    Assess --> Mesh[Check Mesh: 4 nodes]
+    Assess --> Battery[Check Battery]
+    Assess --> Mesh[Check Mesh Network]
 
     Battery --> Tools{Emergency Tools}
     Mesh --> Tools
 
-    Tools --> Flashlight[🔦 Flashlight<br/>Toggle On/Off]
-    Tools --> SOS[📡 SOS Broadcast<br/>Send Distress + GPS]
-    Tools --> Listen[🎤 Sound Signal<br/>Listen for Whistles]
-    Tools --> Network[🌐 Mesh Network<br/>Share GPS / Send Msg]
+    Tools --> Flashlight[Flashlight Toggle]
+    Tools --> SOS[SOS Broadcast]
+    Tools --> Listen[Sound Signal Listen]
+    Tools --> Network[Mesh Network Share GPS]
 
     Flashlight --> Monitor[Monitor Status]
     SOS --> Monitor
     Listen --> Monitor
     Network --> Monitor
 
-    Monitor --> Resolved{Emergency Resolved?}
-    Resolved -->|Yes| Deactivate[Deactivate<br/>Possum Protocol]
+    Monitor --> Resolved{Emergency Resolved}
+    Resolved -->|Yes| Deactivate[Deactivate Protocol]
     Resolved -->|No| Tools
 ```
 
@@ -429,12 +389,12 @@ flowchart TD
 ```mermaid
 timeline
     title Level Progression System
-    Level 1 : Novice (0 XP)<br/>Tutorial complete<br/>First mission started
-    Level 2 : Explorer (500 XP)<br/>5 missions completed<br/>1 country learned
-    Level 3 : Scout (1,000 XP)<br/>10 missions<br/>3 countries<br/>First AR training
-    Level 4 : Ranger (1,500 XP)<br/>YOU ARE HERE<br/>20 missions<br/>5 countries<br/>Flood drill complete
-    Level 5 : Expert (2,500 XP)<br/>40 missions<br/>All countries<br/>3+ disaster types
-    Level 6 : Master (5,000 XP)<br/>All missions complete<br/>All badges earned
+    Level 1 : Novice (0 XP) : Tutorial complete
+    Level 2 : Explorer (500 XP) : 5 missions completed
+    Level 3 : Scout (1000 XP) : 10 missions
+    Level 4 : Ranger (1500 XP) : YOU ARE HERE
+    Level 5 : Expert (2500 XP) : 40 missions
+    Level 6 : Master (5000 XP) : All complete
 ```
 
 ### Badge Collection
@@ -442,17 +402,17 @@ timeline
 ```mermaid
 graph TD
     subgraph Exploration["EXPLORATION BADGES"]
-        Flood[🌊 Flood Explorer<br/>Learn about flood risks]
-        Storm[🌪️ Storm Spotter<br/>Track storm patterns]
+        Flood[Flood Explorer]
+        Storm[Storm Spotter]
     end
 
     subgraph Training["TRAINING BADGES"]
-        Drill[🏃 Drill Master<br/>Complete 10 drills]
-        Night[🔦 Night Scout<br/>Use Possum Protocol]
+        Drill[Drill Master]
+        Night[Night Scout]
     end
 
     subgraph Community["COMMUNITY BADGES"]
-        Hero[🤝 Village Hero<br/>Help 10 users]
+        Hero[Village Hero]
     end
 
     Flood --> LevelUp[Level Up]
@@ -465,40 +425,15 @@ graph TD
 ### Streak System
 
 ```mermaid
-gantt
-    title Daily Engagement Streak
-    dateFormat  YYYY-MM-DD
-    axisFormat  %d
-
-    section Week 1
-    Day 1    :done, d1, 2026-03-01, 1d
-    Day 2    :done, d2, 2026-03-02, 1d
-    Day 3    :done, d3, 2026-03-03, 1d
-    Day 4    :done, d4, 2026-03-04, 1d
-    Day 5    :done, d5, 2026-03-05, 1d
-    Day 6    :active, d6, 2026-03-06, 1d
-    Day 7    :milestone, m7, 2026-03-07, 0d
-
-    section Milestones
-    3 Day Streak    :milestone, m3, 2026-03-03, 0d
-    7 Day Streak    :milestone, m7bonus, 2026-03-07, 0d
-```
-
-```mermaid
 flowchart LR
-    Streak3["3 Day Streak<br/>🏅 Consistent Learner<br/>Unlock Badge"]
-    Streak7["7 Day Streak<br/>+100 XP Bonus"]
-    Streak30["30 Day Streak<br/>🏅 Dedicated<br/>+500 XP"]
-    Streak100["100 Day Streak<br/>🏅 Legendary<br/>+2000 XP"]
-
     Day1([Day 1]) --> Day3([Day 3])
-    Day3 --> Streak3
+    Day3 --> Streak3[3 Day Streak Consistent Learner]
     Streak3 --> Day7([Day 7])
-    Day7 --> Streak7
+    Day7 --> Streak7[7 Day Streak 100 XP Bonus]
     Streak7 --> Day30([Day 30])
-    Day30 --> Streak30
+    Day30 --> Streak30[30 Day Streak Dedicated Badge]
     Streak30 --> Day100([Day 100])
-    Day100 --> Streak100
+    Day100 --> Streak100[100 Day Streak Legendary]
 ```
 
 ---
