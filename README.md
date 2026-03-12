@@ -2,11 +2,6 @@
 
 > A gamified, mobile-first disaster preparedness education platform for children and families across the ASEAN region.
 
-![Platform Type](https://img.shields.io/badge/Type-Progressive%20Web%20App-blue)
-![Framework](https://img.shields.io/badge/Framework-React-18.3.1-cyan)
-![Build Tool](https://img.shields.io/badge/Build-Vite-6.3.5-purple)
-![UI](https://img.shields.io/badge/UI-TailwindCSS-4.1.12-38B2AC)
-
 ---
 
 ## Table of Contents
