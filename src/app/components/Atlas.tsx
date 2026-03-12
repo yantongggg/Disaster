@@ -1,14 +1,18 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { MapPin, Search, Wind, Mountain, TriangleAlert, Droplets, Flame, Sun, X, CheckCircle2, Shield, ZoomIn, ZoomOut, Waves, CloudRain, Activity, AlertCircle } from "lucide-react";
+import { Search, Wind, Mountain, TriangleAlert, Droplets, Sun, X, Shield, ZoomIn, ZoomOut, Waves, CloudRain, Activity, AlertCircle } from "lucide-react";
 
 // ASEAN Map Background Image
-// Place your ASEAN disaster map image at: public/asean-disaster-map.png
-// Update the path below to use your image
-const aseanMapImage = "/asean-disaster-map.png"; // Change this to your image path
+const aseanMapImage = "/asean-disaster-map.png";
 
-// Inline SVG map of Southeast Asia (stylized, Neo-Brutalism)
-const AseanMapSVG = () => (
+// SVG Map Component with embedded markers via foreignObject
+interface AseanMapSVGProps {
+  markers: typeof markers;
+  selectedDisaster: any;
+  onMarkerClick: (marker: any) => void;
+}
+
+const AseanMapSVG = ({ markers, selectedDisaster, onMarkerClick }: AseanMapSVGProps) => (
   <svg viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
     {/* Ocean background */}
     <rect width="1600" height="1200" fill="#DBEAFE" />
@@ -96,8 +100,233 @@ const AseanMapSVG = () => (
       <polygon points="32,0 8,-6 14,0 8,6" fill="#94A3B8" />
       <text y="-36" textAnchor="middle" fontWeight="900" fontSize="14" fill="black">N</text>
     </g>
+
+    {/* Disaster Markers - rendered inside SVG using foreignObject for perfect alignment */}
+    {!selectedDisaster && markers.map((marker) => {
+      const IconComponent = marker.icon;
+      // Offset by 48 to center the 96px marker (including shadow/padding)
+      const offset = 48;
+
+      return (
+        <foreignObject
+          key={marker.id}
+          x={marker.svgX - offset}
+          y={marker.svgY - offset}
+          width="120"
+          height="120"
+          overflow="visible"
+          style={{ cursor: 'pointer' }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onMarkerClick(marker);
+          }}
+        >
+          <div
+            xmlns="http://www.w3.org/1999/xhtml"
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              animation: 'markerFloat 3s ease-in-out infinite'
+            }}
+            className="marker-wrapper group"
+          >
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '20px',
+                border: '4px solid black',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '4px 4px 0px rgba(0,0,0,1)',
+                backgroundColor: 'white',
+                position: 'relative',
+                transition: 'transform 0.2s'
+              }}
+              className="hover:scale-110 active:scale-90"
+            >
+              <IconComponent size={32} color={marker.color} strokeWidth={2.5} />
+            </div>
+
+            {/* Country Label - shows on hover */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '100%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                marginTop: '8px',
+                backgroundColor: 'white',
+                border: '3px solid black',
+                padding: '4px 12px',
+                borderRadius: '9999px',
+                boxShadow: '2px 2px 0px rgba(0,0,0,1)',
+                opacity: 0,
+                transition: 'opacity 0.2s',
+                whiteSpace: 'nowrap',
+                pointerEvents: 'none'
+              }}
+              className="group-hover:opacity-100 marker-label"
+            >
+              <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}>
+                {marker.country}
+              </span>
+            </div>
+          </div>
+        </foreignObject>
+      );
+    })}
   </svg>
 );
+
+// Matrix Markers (10 ASEAN Countries)
+// Positions use exact SVG coordinates from text/circle elements
+const markers = [
+  {
+    id: "ph",
+    type: "typhoon",
+    country: "Philippines",
+    icon: Wind,
+    color: "#4CC9F0",
+    svgX: 885,  // From SVG text x="885"
+    svgY: 340,  // From SVG text y="340"
+    flag: "🇵🇭",
+    profile: "Extremely high disaster risk. Located in the Pacific typhoon belt, volcanic arc, earthquake faults, and mountainous islands prone to landslides.",
+    history: ["Super Typhoon Haiyan (2013): 6,300+ deaths, 4M displaced.", "Mount Pinatubo Eruption (1991): 800+ deaths."],
+    pattern: ["Super typhoons", "Storm surges", "Flooding", "Volcanic eruptions"],
+    forecast: "Climate models predict stronger typhoons, heavier rainfall, and larger storm surges."
+  },
+  {
+    id: "id",
+    type: "volcano",
+    country: "Indonesia",
+    icon: TriangleAlert,
+    color: "#EF476F",
+    svgX: 730,  // From SVG text x="730"
+    svgY: 970,  // From SVG text y="970"
+    flag: "🇮🇩",
+    profile: "One of the most geologically active countries. Located along the Pacific Ring of Fire with 130+ active volcanoes.",
+    history: ["2004 Indian Ocean Tsunami: 170,000+ deaths in Indonesia alone.", "Mount Merapi Eruption (2010): 350+ deaths.", "2025 Sumatra Flood: 1,000+ deaths."],
+    pattern: ["Volcanic eruptions", "Earthquakes", "Monsoon flooding", "Tsunamis"],
+    forecast: "Climate change increases extreme rainfall, landslides, and coastal flooding."
+  },
+  {
+    id: "my",
+    type: "flood",
+    country: "Malaysia",
+    icon: Droplets,
+    color: "#4682B4",
+    svgX: 445,  // From SVG text x="445"
+    svgY: 690,  // From SVG text y="690"
+    flag: "🇲🇾",
+    profile: "Mainly faces hydrological disasters. High exposure to monsoon flooding, landslides, and coastal storms.",
+    history: ["2021–2022 Floods: 54 deaths, massive damages in Selangor & KL.", "2025 Cyclonic Storm Senyar: Rare cyclone caused major flooding."],
+    pattern: ["Flash floods", "Monsoon floods", "Urban flooding", "Landslides"],
+    forecast: "Projections indicate heavier monsoon rainfall, stronger coastal storms, and increased urban flash floods."
+  },
+  {
+    id: "th",
+    type: "flood",
+    country: "Thailand",
+    icon: Waves,
+    color: "#06D6A0",
+    svgX: 430,  // From SVG text x="430"
+    svgY: 470,  // From SVG text y="470"
+    flag: "🇹🇭",
+    profile: "Faces mainly monsoon floods, droughts, and tropical storms. Large rivers increase widespread flood risk.",
+    history: ["2011 Mega Flood: 815 deaths, $46B damage. Bangkok almost completely flooded.", "2016–2017 Southern Floods: Affected 1.8M people."],
+    pattern: ["Seasonal flooding", "Drought in northeast", "Tropical storms"],
+    forecast: "Major concern: Bangkok sinking. Sea-level rise, river flooding, and urban drainage failure."
+  },
+  {
+    id: "vn",
+    type: "typhoon",
+    country: "Vietnam",
+    icon: CloudRain,
+    color: "#118AB2",
+    svgX: 660,  // From SVG text x="660"
+    svgY: 410,  // From SVG text y="410"
+    flag: "🇻🇳",
+    profile: "One of the highest typhoon exposure levels in Asia. High risk of coastal and river flooding.",
+    history: ["1964 Central Vietnam Floods: 7,000 deaths.", "2025 Typhoon Season: Several storms caused severe flooding."],
+    pattern: ["Typhoons", "Flooding", "Landslides"],
+    forecast: "Major issue: Mekong Delta sinking. Predictions suggest up to 54% of delta below sea level by 2100."
+  },
+  {
+    id: "mm",
+    type: "cyclone",
+    country: "Myanmar",
+    icon: Activity,
+    color: "#FFD166",
+    svgX: 315,  // From SVG text x="315"
+    svgY: 340,  // From SVG text y="340"
+    flag: "🇲🇲",
+    profile: "Highly vulnerable to cyclones, earthquakes, landslides, and monsoon flooding.",
+    history: ["Cyclone Nargis (2008): 138,000 deaths, millions displaced.", "2025 Earthquake: Magnitude 7.7 widespread damage.", "Cyclone Komen (2015): 1.7M displaced."],
+    pattern: ["Cyclones", "Earthquakes", "Landslides", "Monsoon flooding"],
+    forecast: "Climate models show stronger cyclones, increased coastal flooding, and landslides."
+  },
+  {
+    id: "sg",
+    type: "heat",
+    country: "Singapore",
+    icon: Sun,
+    color: "#FF9F1C",
+    svgX: 465,  // From SVG circle cx="465"
+    svgY: 795,  // From SVG circle cy="795"
+    flag: "🇸🇬",
+    profile: "Has fewer disasters but faces increasing urban climate risks like heat waves and flash floods.",
+    history: ["2010 Orchard Road Flood: Urban drainage failure caused major city flooding."],
+    pattern: ["Heat waves", "Flash floods", "Sea level rise"],
+    forecast: "Key concern: Sea level rise. Coastal flooding and extreme heat days are increasing."
+  },
+  {
+    id: "kh",
+    type: "flood",
+    country: "Cambodia",
+    icon: Droplets,
+    color: "#073B4C",
+    svgX: 585,  // From SVG text x="585"
+    svgY: 520,  // From SVG text y="520"
+    flag: "🇰🇭",
+    profile: "Disasters are heavily linked to the Mekong River system, leading to alternating flood and drought cycles.",
+    history: ["Mekong Floods (2000): 347 deaths, huge agricultural losses."],
+    pattern: ["Seasonal flooding", "Droughts"],
+    forecast: "Climate projections indicate extreme Mekong floods and severe droughts."
+  },
+  {
+    id: "la",
+    type: "flood",
+    country: "Laos",
+    icon: Mountain,
+    color: "#8B5A2B",
+    svgX: 505,  // From SVG text x="505"
+    svgY: 330,  // From SVG text y="330"
+    flag: "🇱🇦",
+    profile: "A mountainous country facing significant risks from river flooding, landslides, and dam failures.",
+    history: ["2018 Xe-Pian Xe-Namnoy Dam Collapse: Hundreds dead, thousands displaced."],
+    pattern: ["River flooding", "Landslides", "Dam failures"],
+    forecast: "Major threats include stronger monsoon floods and landslides."
+  },
+  {
+    id: "bn",
+    type: "storm",
+    country: "Brunei",
+    icon: Shield,
+    color: "#06D6A0",
+    svgX: 720,  // From SVG circle cx="720"
+    svgY: 635,  // From SVG circle cy="635"
+    flag: "🇧🇳",
+    profile: "Lowest disaster exposure in ASEAN, with minimal displacement numbers.",
+    history: ["Generally stable with the lowest disaster displacement numbers in Southeast Asia."],
+    pattern: ["Flooding", "Storms"],
+    forecast: "Potential future hazards include coastal flooding and stronger monsoon storms."
+  }
+];
 
 export function Atlas() {
   const [selectedDisaster, setSelectedDisaster] = useState<any>(null);
@@ -111,182 +340,34 @@ export function Atlas() {
 
   const openDisaster = (d: any) => {
     setSelectedDisaster(d);
-    setSearchQuery(""); // Clear search when opening
+    setSearchQuery("");
     setShowSuggestions(false);
   };
 
-  // Matrix Markers (10 ASEAN Countries)
-  // Positions calculated from SVG text/circle coordinates (viewBox="0 0 1600 1200")
-  // Formula: left% = (svgX / 1600) * 100, top% = (svgY / 1200) * 100
-  const markers = [
-    {
-      id: "ph",
-      type: "typhoon",
-      country: "Philippines",
-      icon: Wind,
-      color: "#4CC9F0",
-      top: "28.3%",  // SVG text y="340" → 340/1200
-      left: "55.3%", // SVG text x="885" → 885/1600
-      flag: "🇵🇭",
-      profile: "Extremely high disaster risk. Located in the Pacific typhoon belt, volcanic arc, earthquake faults, and mountainous islands prone to landslides.",
-      history: ["Super Typhoon Haiyan (2013): 6,300+ deaths, 4M displaced.", "Mount Pinatubo Eruption (1991): 800+ deaths."],
-      pattern: ["Super typhoons", "Storm surges", "Flooding", "Volcanic eruptions"],
-      forecast: "Climate models predict stronger typhoons, heavier rainfall, and larger storm surges."
-    },
-    {
-      id: "id",
-      type: "volcano",
-      country: "Indonesia",
-      icon: TriangleAlert,
-      color: "#EF476F",
-      top: "80.8%",  // SVG text y="970" → 970/1200
-      left: "45.6%", // SVG text x="730" → 730/1600
-      flag: "🇮🇩",
-      profile: "One of the most geologically active countries. Located along the Pacific Ring of Fire with 130+ active volcanoes.",
-      history: ["2004 Indian Ocean Tsunami: 170,000+ deaths in Indonesia alone.", "Mount Merapi Eruption (2010): 350+ deaths.", "2025 Sumatra Flood: 1,000+ deaths."],
-      pattern: ["Volcanic eruptions", "Earthquakes", "Monsoon flooding", "Tsunamis"],
-      forecast: "Climate change increases extreme rainfall, landslides, and coastal flooding."
-    },
-    {
-      id: "my",
-      type: "flood",
-      country: "Malaysia",
-      icon: Droplets,
-      color: "#4682B4",
-      top: "57.5%",  // SVG text y="690" → 690/1200 (Peninsula)
-      left: "27.8%", // SVG text x="445" → 445/1600
-      flag: "🇲🇾",
-      profile: "Mainly faces hydrological disasters. High exposure to monsoon flooding, landslides, and coastal storms.",
-      history: ["2021–2022 Floods: 54 deaths, massive damages in Selangor & KL.", "2025 Cyclonic Storm Senyar: Rare cyclone caused major flooding."],
-      pattern: ["Flash floods", "Monsoon floods", "Urban flooding", "Landslides"],
-      forecast: "Projections indicate heavier monsoon rainfall, stronger coastal storms, and increased urban flash floods."
-    },
-    {
-      id: "th",
-      type: "flood",
-      country: "Thailand",
-      icon: Waves,
-      color: "#06D6A0",
-      top: "39.2%",  // SVG text y="470" → 470/1200
-      left: "26.9%", // SVG text x="430" → 430/1600
-      flag: "🇹🇭",
-      profile: "Faces mainly monsoon floods, droughts, and tropical storms. Large rivers increase widespread flood risk.",
-      history: ["2011 Mega Flood: 815 deaths, $46B damage. Bangkok almost completely flooded.", "2016–2017 Southern Floods: Affected 1.8M people."],
-      pattern: ["Seasonal flooding", "Drought in northeast", "Tropical storms"],
-      forecast: "Major concern: Bangkok sinking. Sea-level rise, river flooding, and urban drainage failure."
-    },
-    {
-      id: "vn",
-      type: "typhoon",
-      country: "Vietnam",
-      icon: CloudRain,
-      color: "#118AB2",
-      top: "34.2%",  // SVG text y="410" → 410/1200
-      left: "41.3%", // SVG text x="660" → 660/1600
-      flag: "🇻🇳",
-      profile: "One of the highest typhoon exposure levels in Asia. High risk of coastal and river flooding.",
-      history: ["1964 Central Vietnam Floods: 7,000 deaths.", "2025 Typhoon Season: Several storms caused severe flooding."],
-      pattern: ["Typhoons", "Flooding", "Landslides"],
-      forecast: "Major issue: Mekong Delta sinking. Predictions suggest up to 54% of delta below sea level by 2100."
-    },
-    {
-      id: "mm",
-      type: "cyclone",
-      country: "Myanmar",
-      icon: Activity,
-      color: "#FFD166",
-      top: "28.3%",  // SVG text y="340" → 340/1200
-      left: "19.7%", // SVG text x="315" → 315/1600
-      flag: "🇲🇲",
-      profile: "Highly vulnerable to cyclones, earthquakes, landslides, and monsoon flooding.",
-      history: ["Cyclone Nargis (2008): 138,000 deaths, millions displaced.", "2025 Earthquake: Magnitude 7.7 widespread damage.", "Cyclone Komen (2015): 1.7M displaced."],
-      pattern: ["Cyclones", "Earthquakes", "Landslides", "Monsoon flooding"],
-      forecast: "Climate models show stronger cyclones, increased coastal flooding, and landslides."
-    },
-    {
-      id: "sg",
-      type: "heat",
-      country: "Singapore",
-      icon: Sun,
-      color: "#FF9F1C",
-      top: "66.3%",  // SVG circle cy="795" → 795/1200
-      left: "29.1%", // SVG circle cx="465" → 465/1600
-      flag: "🇸🇬",
-      profile: "Has fewer disasters but faces increasing urban climate risks like heat waves and flash floods.",
-      history: ["2010 Orchard Road Flood: Urban drainage failure caused major city flooding."],
-      pattern: ["Heat waves", "Flash floods", "Sea level rise"],
-      forecast: "Key concern: Sea level rise. Coastal flooding and extreme heat days are increasing."
-    },
-    {
-      id: "kh",
-      type: "flood",
-      country: "Cambodia",
-      icon: Droplets,
-      color: "#073B4C",
-      top: "43.3%",  // SVG text y="520" → 520/1200
-      left: "36.6%", // SVG text x="585" → 585/1600
-      flag: "🇰🇭",
-      profile: "Disasters are heavily linked to the Mekong River system, leading to alternating flood and drought cycles.",
-      history: ["Mekong Floods (2000): 347 deaths, huge agricultural losses."],
-      pattern: ["Seasonal flooding", "Droughts"],
-      forecast: "Climate projections indicate extreme Mekong floods and severe droughts."
-    },
-    {
-      id: "la",
-      type: "flood",
-      country: "Laos",
-      icon: Mountain,
-      color: "#8B5A2B",
-      top: "27.5%",  // SVG text y="330" → 330/1200
-      left: "31.6%", // SVG text x="505" → 505/1600
-      flag: "🇱🇦",
-      profile: "A mountainous country facing significant risks from river flooding, landslides, and dam failures.",
-      history: ["2018 Xe-Pian Xe-Namnoy Dam Collapse: Hundreds dead, thousands displaced."],
-      pattern: ["River flooding", "Landslides", "Dam failures"],
-      forecast: "Major threats include stronger monsoon floods and landslides."
-    },
-    {
-      id: "bn",
-      type: "storm",
-      country: "Brunei",
-      icon: Shield,
-      color: "#06D6A0",
-      top: "52.9%",  // SVG circle cy="635" → 635/1200
-      left: "45.0%", // SVG circle cx="720" → 720/1600
-      flag: "🇧🇳",
-      profile: "Lowest disaster exposure in ASEAN, with minimal displacement numbers.",
-      history: ["Generally stable with the lowest disaster displacement numbers in Southeast Asia."],
-      pattern: ["Flooding", "Storms"],
-      forecast: "Potential future hazards include coastal flooding and stronger monsoon storms."
-    }
-  ];
-
   return (
     <div className="h-full flex flex-col relative overflow-hidden font-sans bg-[#E6F4F1]">
-      
-      {/* Wave Background Pattern (CSS pseudo-elements below) */}
+
+      {/* Wave Background Pattern */}
       <div className="absolute inset-0 ocean-waves opacity-20 pointer-events-none z-0" />
 
-      {/* Top Navigation (Z-Index 2) */}
+      {/* Top Navigation */}
       <div className="absolute top-0 left-0 w-full p-6 z-20 pointer-events-none flex flex-col gap-4">
-        
-        {/* Search Bar & Radar Toggle */}
         <div className="flex justify-between items-center gap-4 pointer-events-auto">
           <div className="flex-1 bg-white border-[4px] border-black rounded-full px-5 py-3 flex items-center gap-3 shadow-[4px_4px_0px_rgba(0,0,0,1)] relative">
             <Search size={20} className="text-slate-400" />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Where do you want to explore?"
               className="bg-transparent border-none outline-none w-full font-bold text-slate-700 placeholder:text-slate-400 text-sm"
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
               onFocus={() => setShowSuggestions(true)}
             />
-            
+
             {/* Search Suggestions Dropdown */}
             <AnimatePresence>
               {showSuggestions && searchQuery.length > 0 && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -300,7 +381,7 @@ export function Atlas() {
                         onClick={() => openDisaster(m)}
                         className="w-full px-5 py-3 flex items-center gap-3 hover:bg-slate-100 transition-colors text-left border-b border-slate-200 last:border-0"
                       >
-                        <div 
+                        <div
                           className="w-8 h-8 rounded-lg flex items-center justify-center border-2 border-black shrink-0"
                           style={{ backgroundColor: m.color + '20', borderColor: m.color }}
                         >
@@ -325,7 +406,7 @@ export function Atlas() {
         </div>
       </div>
 
-      {/* Base Layer (Z-Index 0) */}
+      {/* Base Layer */}
       <div className={`flex-1 relative overflow-hidden transition-all duration-700 ${selectedDisaster ? 'bg-[#1A2639]' : 'bg-[#E6F4F1]'}`} ref={mapRef}>
 
         {/* Map Focus Overlay */}
@@ -347,70 +428,33 @@ export function Atlas() {
           </button>
         </div>
 
-        {/* Responsive Map Container - maintains 4:3 aspect ratio */}
+        {/* Responsive Map Container */}
         <div className="absolute inset-0 flex items-center justify-center p-4">
           <motion.div
-            className="relative w-full max-w-[1600px] aspect-[4/3] origin-center rounded-3xl overflow-hidden border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)]"
-            style={{
-              backgroundImage: `url(${aseanMapImage})`,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              backgroundColor: '#DBEAFE'
-            }}
+            className="relative w-full max-w-[1600px] aspect-[4/3] origin-center rounded-3xl overflow-hidden border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)] bg-[#DBEAFE]"
             animate={{ scale: mapScale }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             drag={!selectedDisaster}
             dragConstraints={mapRef}
             whileTap={{ cursor: selectedDisaster ? 'default' : 'grabbing' }}
+            style={{
+              backgroundImage: `url(${aseanMapImage})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center'
+            }}
           >
-
-            {/* Fallback SVG Map Background - shown if image fails to load */}
-            <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
-              <AseanMapSVG />
-            </div>
-
-            {/* Disaster Markers (Z-Index 10) - positioned relative to map container */}
-            <AnimatePresence>
-              {!selectedDisaster && markers.map((m) => (
-                <motion.div
-                  key={m.id}
-                  initial={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  onClick={() => openDisaster(m)}
-                  className="absolute z-[10] cursor-pointer"
-                  style={{
-                    top: m.top,
-                    left: m.left,
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                >
-                <motion.div 
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="relative group"
-                >
-                  <div className={`w-16 h-16 rounded-[1.5rem] border-[4px] border-black flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-white relative z-10`}>
-                    <m.icon size={36} color={m.color} strokeWidth={2.5} />
-                    {/* Cute faces for specific icons could be added via SVG, but sticking to standard icons for now */}
-                  </div>
-                  
-                  {/* Country Label */}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border-[3px] border-black px-3 py-1 rounded-full shadow-[2px_2px_0px_rgba(0,0,0,1)] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20 pointer-events-none">
-                    <span className="text-[10px] font-black uppercase">{m.country}</span>
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-
+            {/* SVG Map with embedded markers - perfect alignment guaranteed */}
+            <AseanMapSVG
+              markers={markers}
+              selectedDisaster={selectedDisaster}
+              onMarkerClick={openDisaster}
+            />
           </motion.div>
         </div>
       </div>
 
-      {/* History Capsule Modal (Z-Index 3) */}
+      {/* History Capsule Modal */}
       <AnimatePresence>
         {selectedDisaster && (
           <>
@@ -423,14 +467,14 @@ export function Atlas() {
             >
               {/* Handle */}
               <div className="w-16 h-2 bg-slate-200 rounded-full mx-auto mb-6 shrink-0" />
-              
-              <button 
+
+              <button
                 onClick={() => { setSelectedDisaster(null); }}
                 className="absolute top-6 right-6 w-10 h-10 bg-white border-2 border-slate-200 text-slate-500 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors z-10"
               >
                 <X size={20} strokeWidth={3} />
               </button>
-              
+
               <div className="overflow-y-auto hide-scrollbar flex-1 pb-10">
                 <div className="flex items-center gap-4 mb-6">
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border-[3px] border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-white`} style={{ borderColor: selectedDisaster.color }}>
@@ -443,7 +487,7 @@ export function Atlas() {
                     <p className="text-slate-500 font-bold uppercase tracking-wider text-xs mt-1">Geographic Risk Profile</p>
                   </div>
                 </div>
-                
+
                 {/* Risk Profile Card */}
                 <div className="bg-slate-50 border-[3px] border-black rounded-2xl p-5 shadow-[4px_4px_0px_rgba(0,0,0,1)] mb-6">
                   <p className="text-lg font-bold text-slate-700 leading-snug">
@@ -468,7 +512,7 @@ export function Atlas() {
                 {/* Major Historical Disasters */}
                 <div className="mb-6">
                   <h3 className="text-lg font-black flex items-center gap-2 mb-3">
-                    <AlertCircle size={20} className="text-orange-500" strokeWidth={3} /> Major Historical Disasters
+                    <AlertCircle size={20} className="orange-500" strokeWidth={3} /> Major Historical Disasters
                   </h3>
                   <div className="space-y-3">
                     {selectedDisaster.history.map((h: string, i: number) => {
@@ -495,11 +539,11 @@ export function Atlas() {
 
               </div>
             </motion.div>
-            
+
             {/* Click-away backdrop */}
-            <div 
-              className="absolute inset-0 z-[40]" 
-              onClick={() => { setSelectedDisaster(null); }} 
+            <div
+              className="absolute inset-0 z-[40]"
+              onClick={() => { setSelectedDisaster(null); }}
             />
           </>
         )}
@@ -514,17 +558,23 @@ export function Atlas() {
           scrollbar-width: none;
         }
         .ocean-waves {
-          background-image: radial-gradient(circle at 10px -5px, transparent 12px, #E6F4F1 13px), 
+          background-image: radial-gradient(circle at 10px -5px, transparent 12px, #E6F4F1 13px),
                             radial-gradient(circle at 10px 15px, #E6F4F1 12px, transparent 13px);
           background-size: 20px 20px;
           background-color: #89CFF0;
         }
-        .route-ants {
-          animation: march 1s linear infinite;
+        @keyframes markerFloat {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
         }
-        @keyframes march {
-          from { stroke-dashoffset: 32; }
-          to { stroke-dashoffset: 0; }
+        .marker-wrapper {
+          animation: markerFloat 3s ease-in-out infinite;
+        }
+        .marker-wrapper:hover {
+          animation-play-state: paused;
+        }
+        .marker-label:hover {
+          opacity: 1 !important;
         }
       `}</style>
     </div>
